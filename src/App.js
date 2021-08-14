@@ -14,16 +14,19 @@ const query = `
 }
 `;
 
+const contentful_space = process.env.REACT_APP_SPACE_ID;
+const contentful_access_token = process.env.REACT_APP_ACCESS_TOKEN;
+
 function App() {
   const [page, setPage] = useState(null);
   useEffect(() => {
     window
-      .fetch(`https://graphql.contentful.com/content/v1/spaces/suvnqgucc71m/`, {
+      .fetch(`https://graphql.contentful.com/content/v1/spaces/${contentful_space}/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           // Authenticate the request
-          Authorization: "Bearer t-KqRYBUmxH7r_Y2CoANMNzVctyJXujJ2lKOUG2GNbc",
+          Authorization: "Bearer "+ contentful_access_token,
         },
         // send the GraphQL query
         body: JSON.stringify({ query }),
@@ -33,6 +36,8 @@ function App() {
         if (errors) {
           console.error(errors);
         }
+        console.log("process.env = " + process.env);
+        console.log("space + token = " + contentful_space + ' ' + contentful_access_token);
 
         // rerender the entire component with new data
         setPage(data.reactPageCollection.items[0]);
